@@ -1,0 +1,8 @@
+.rdrMonthAndYearPickers select {
+  max-height: 150px;      /* or whatever height works */
+  overflow-y: auto;       /* allow vertical scroll */
+}
+
+.rdrMonthAndYearPickers {
+  z-index: 50 !important; /* ensure it appears above calendar content if needed */
+}
