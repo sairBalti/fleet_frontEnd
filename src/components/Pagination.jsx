@@ -24,9 +24,9 @@ const Pagination = ({
   const noRecords = totalEntries === 0;
 
   return (
-    <div className="flex items-center justify-between px-4 py-3">
+    <div className="flex flex-col gap-3 px-2 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4">
       {/* Show Entries */}
-      <div className="flex items-center space-x-2">
+      <div className="flex flex-wrap items-center gap-2">
         <span className="text-sm text-gray-500 text-center">Show</span>
         <select
           value={pageSize}
@@ -47,7 +47,7 @@ const Pagination = ({
       </div>
 
       {/* Pagination Controls */}
-      <div className="flex items-center space-x-1">
+      <div className="flex flex-wrap items-center gap-1">
         <button
           disabled={noRecords || currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}

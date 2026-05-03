@@ -1,7 +1,7 @@
 import { useState } from "react";
-import logo from "../assets/logoimg.png";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import BrandLogo from "../components/BrandLogo";
 import { signup } from "../services/authService";
 
 const SignUp = () => {
@@ -42,6 +42,7 @@ const SignUp = () => {
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="bg-white rounded-lg shadow-lg w-[400px] sm:w-[450px] p-6">
         <div className="flex flex-col items-center text-center mb-4">
+          <BrandLogo theme="authForm" />
           <h2 className="text-2xl font-bold text-gray-800">Sign Up</h2>
           <p className="text-sm text-gray-700 font-bold mt-2">
             Fill in your details to create an account

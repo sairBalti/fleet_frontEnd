@@ -27,7 +27,13 @@ export const validateAICommand = ({ message, file }) => {
             "image/jpg"
         ];
 
-        if (!allowedTypes.includes(file.type)) {
+        const csvByName = /\.csv$/i.test(file.name || "");
+        const csvOkType =
+            !file.type ||
+            file.type === "application/octet-stream" ||
+            file.type === "text/csv" ||
+            file.type === "application/vnd.ms-excel";
+        if (!allowedTypes.includes(file.type) && !(csvByName && csvOkType)) {
             return VALIDATION_MESSAGES.INVALID_FILE_TYPE;
         }
 

@@ -22,3 +22,30 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# =========================
+# React / Frontend
+# =========================
+# dependencies
+**/node_modules/
+
+# production build
+**/dist/
+**/build/
+
+# misc
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# testing
+coverage/
+*.lcov
+
+# dotenv files
+*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

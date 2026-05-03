@@ -4,15 +4,15 @@ const StatusFilter = ({ value, onChange }) => {
     if (value === "Active") return "focus:ring-green-100";
     if (value === "Unavailable") return "focus:ring-red-100";
     if (value === "Maintenance") return "focus:ring-yellow-100";
-    return "text-gray-500"; // Default style
+    return "focus:ring-gray-200";
   };
 
   return (
     <select
-      value={value}
+      value={value ?? "All"}
       id="SelectStatus"
       onChange={(e) => onChange(e.target.value)}
-      className={`border px-3 py-2 rounded-md focus:outline-none focus:ring-1 text-sm h-10 w-60 bg-white ${getFocusRingColor()}`}
+      className={`h-10 w-full min-w-0 max-w-full rounded-md border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-1 sm:w-60 ${getFocusRingColor()}`}
     >
       <option disabled value="">Select Status</option>
       <option value="All">All</option>

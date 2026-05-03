@@ -2,19 +2,14 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import AddButton from "../../components/AddButton";
-import Checkbox from "../../components/Checkbox";
 import SortIcons from "../../components/SortIcons";
-import { getBranchList, previewCompanyAI, createCompanyAI } from "../../services/businessService";
-import Dropdown from "../../components/dropdown";
-import DateRangeFilter from "../../components/DateRangeFilter";
-import { format, set } from "date-fns";
-import { MdEdit, MdDeleteOutline } from "react-icons/md";
+import { createBranchAI, getBranchList, previewBranchAI } from "../../services/businessService";
+import Dropdown from "../../components/Dropdown";
 import Pagination from "../../components/Pagination";
 import AICommandBar from "../../components/AiCommandBar";
 import { getUserData } from "../../utils/auth";
-import PreviewModal from "../../components/PreviewModal";
 import { useNavigate } from "react-router-dom";
+import BranchPreviewModal from "../../components/BranchPreviewModal";
 
 const BranchList = () => {
 
@@ -23,7 +18,6 @@ const BranchList = () => {
 
     const [userRole, setUserRole] = useState(null);
     const [companyId, setCompanyId] = useState(null);
-    const [branchId, setBranchId] = useState(null); //  ADD THIS
 
     const [branches, setBranches] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -59,7 +53,6 @@ const BranchList = () => {
         if (userData) {
             setUserRole(userData.role);
             setCompanyId(userData.company_id);
-            setBranchId(userData.branch_id);
         }
     }, []);
 
@@ -117,41 +110,130 @@ const BranchList = () => {
         { id: "0", name: "Inactive" }
     ];
 
+    const isBranchAIAllowed = ["SuperAdmin", "CompanyAdmin", "CompanyManager"].includes(userRole);
+
+    const handlePreview = async ({ message, file }) => {
+        if (!message && !file) return;
+
+        const msg = (message || "").toLowerCase();
+        const directAction =
+            msg.includes("update") ||
+            msg.includes("edit") ||
+            msg.includes("deactivate") ||
+            msg.includes("inactive") ||
+            msg.includes("activate");
+
+        try {
+            setModalErrors({});
+
+            if (file) {
+                await createBranchAI({
+                    message,
+                    data: {
+                        file,
+                        company_id: companyIdFromRoute || companyId || null,
+                    },
+                });
+                fetchBranches();
+                setResetCommandBar((previous) => !previous);
+                return;
+            }
+
+            if (directAction) {
+                await createBranchAI({ message });
+                fetchBranches();
+                setResetCommandBar((previous) => !previous);
+                return;
+            }
+
+            const res = await previewBranchAI({ message });
+            if (res.success) {
+                const preview = {
+                    ...res.preview,
+                    action: res.preview.action || "CREATE_BRANCH",
+                    company_id: res.preview.company_id || companyIdFromRoute || companyId || "",
+                };
+                setPreviewData(preview);
+                setShowModal(true);
+            }
+        } catch (err) {
+            const apiError = err?.response?.data || err;
+            setModalErrors({
+                general: apiError?.message || "Unable to process branch AI command",
+            });
+        }
+    };
+
+    const handleSave = async (updatedData) => {
+        try {
+            setModalErrors({});
+            await createBranchAI({
+                data: {
+                    action: updatedData.action || "CREATE_BRANCH",
+                    company_id: updatedData.company_id || companyIdFromRoute || companyId,
+                    branch_name: updatedData.branch_name,
+                    branch_location: updatedData.branch_location,
+                },
+            });
+            setShowModal(false);
+            fetchBranches();
+            setResetCommandBar((previous) => !previous);
+        } catch (err) {
+            const apiError = err?.response?.data || err;
+            setModalErrors({
+                general: apiError?.message || "Unable to save branch action",
+            });
+        }
+    };
+
     return (
         <div className="space-y-4">
 
+            {isBranchAIAllowed && (
+                <div className="p-6 bg-gray-50 flex justify-end">
+                    <AICommandBar
+                        placeholder="Add branch Lahore Central at Lahore for company 4 or upload branch CSV"
+                        onExecute={handlePreview}
+                        onSuccess={() => fetchBranches()}
+                        onError={(err) => console.error(err)}
+                        resetTrigger={resetCommandBar}
+                        disabled={showModal}
+                    />
+                </div>
+            )}
+
+            {modalErrors?.general && (
+                <div className="bg-red-50 border border-red-300 p-3 rounded text-sm mt-2">
+                    <p className="text-red-600 font-semibold">{modalErrors.general}</p>
+                </div>
+            )}
 
             <div>
                 <h1>{companyName} - Branch List</h1>
                 {/* Add your branch list content here */}
             </div>
             {/* 🔹 FILTERS */}
-            <div className="p-6 bg-gray-50 flex justify-between">
-                <div className="flex items-start justify-start gap-4">
-                    <input
-                        type="text"
-                        placeholder="search branch"
-                        className="border p-2 rounded text-sm text-gray-700 focus:outline-none focus:ring-1 focus:border-blue-200 w-full"
-                        value={nameFilter}
-                        onChange={(e) => {
-                            setPageNumber(1);
-                            setNameFilter(e.target.value);
-                        }}
-                    />
-                    <Dropdown
-                        options={statusOptions}
-                        value={statusFilter}
-                        onChange={(val) => {
-                            setPageNumber(1);
-                            SetStatusFilter(val);
-                        }}
-                        placeholder="All Status"
-                        className="h-9" />
-
-                </div>
-                <div className="flex gap-4 items-end justify-end">
-
-                </div>
+            <div className="flex flex-col gap-3 bg-gray-50 p-4 sm:flex-row sm:items-end sm:p-6">
+                <input
+                    type="text"
+                    placeholder="search branch"
+                    className="w-full rounded border p-2 text-sm text-gray-700 focus:border-blue-200 focus:outline-none focus:ring-1 sm:min-w-0 sm:flex-1"
+                    value={nameFilter}
+                    onChange={(e) => {
+                        setPageNumber(1);
+                        setNameFilter(e.target.value);
+                    }}
+                />
+                <Dropdown
+                    options={statusOptions}
+                    value={statusFilter}
+                    onChange={(val) => {
+                        setPageNumber(1);
+                        SetStatusFilter(val);
+                    }}
+                    placeholder="All Status"
+                    className="w-full min-w-0 shrink-0 sm:w-52"
+                />
             </div>
 
 
@@ -242,6 +324,15 @@ const BranchList = () => {
                     setPageNumber(1);
                 }}
             />
+
+            {showModal && (
+                <BranchPreviewModal
+                    data={previewData}
+                    errors={modalErrors}
+                    onClose={() => setShowModal(false)}
+                    onSave={handleSave}
+                />
+            )}
 
         </div>
     );

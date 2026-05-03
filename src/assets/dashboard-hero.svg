@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8F0FE"/>
+      <stop offset="100%" stop-color="#F0FDFA"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="480" height="300" rx="12" fill="url(#bg)" filter="url(#shadow)"/>
+  <!-- sidebar -->
+  <rect x="16" y="16" width="72" height="268" rx="8" fill="#fff" opacity="0.95"/>
+  <rect x="28" y="32" width="48" height="8" rx="4" fill="#2563EB" opacity="0.85"/>
+  <rect x="28" y="52" width="40" height="6" rx="3" fill="#94A3B8"/>
+  <rect x="28" y="68" width="44" height="6" rx="3" fill="#CBD5E1"/>
+  <rect x="28" y="84" width="36" height="6" rx="3" fill="#CBD5E1"/>
+  <rect x="28" y="108" width="48" height="6" rx="3" fill="#14B8A6" opacity="0.5"/>
+  <!-- main -->
+  <rect x="100" y="16" width="364" height="48" rx="8" fill="#fff" opacity="0.95"/>
+  <rect x="116" y="34" width="120" height="12" rx="4" fill="#0F172A" opacity="0.08"/>
+  <rect x="380" y="32" width="68" height="16" rx="6" fill="#2563EB" opacity="0.9"/>
+  <!-- cards row -->
+  <rect x="100" y="80" width="110" height="72" rx="8" fill="#fff" opacity="0.95"/>
+  <rect x="112" y="94" width="56" height="8" rx="3" fill="#64748B" opacity="0.35"/>
+  <rect x="112" y="112" width="86" height="24" rx="4" fill="#2563EB" opacity="0.15"/>
+  <rect x="222" y="80" width="110" height="72" rx="8" fill="#fff" opacity="0.95"/>
+  <rect x="234" y="94" width="56" height="8" rx="3" fill="#64748B" opacity="0.35"/>
+  <rect x="234" y="112" width="86" height="24" rx="4" fill="#14B8A6" opacity="0.2"/>
+  <rect x="344" y="80" width="120" height="72" rx="8" fill="#fff" opacity="0.95"/>
+  <rect x="356" y="94" width="56" height="8" rx="3" fill="#64748B" opacity="0.35"/>
+  <rect x="356" y="112" width="96" height="24" rx="4" fill="#F59E0B" opacity="0.15"/>
+  <!-- chart area -->
+  <rect x="100" y="166" width="240" height="118" rx="8" fill="#fff" opacity="0.95"/>
+  <rect x="112" y="180" width="80" height="10" rx="3" fill="#0F172A" opacity="0.07"/>
+  <path d="M120 260 L140 230 L165 245 L195 200 L220 215 L250 185 L280 195 L310 170 L330 188" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+  <rect x="112" y="248" width="216" height="4" rx="2" fill="#E2E8F0"/>
+  <!-- map / list -->
+  <rect x="352" y="166" width="112" height="118" rx="8" fill="#fff" opacity="0.95"/>
+  <circle cx="396" cy="210" r="24" fill="#14B8A6" opacity="0.2"/>
+  <circle cx="396" cy="210" r="6" fill="#14B8A6"/>
+  <rect x="368" y="236" width="80" height="6" rx="2" fill="#CBD5E1"/>
+  <rect x="368" y="248" width="64" height="6" rx="2" fill="#E2E8F0"/>
+</svg>

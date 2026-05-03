@@ -5,7 +5,7 @@ import AddButton from "../../components/AddButton";
 import Checkbox from "../../components/Checkbox";
 import SortIcons from "../../components/SortIcons";
 import { createCompanyAI, getCompanyList, previewCompanyAI } from "../../services/businessService";
-import Dropdown from "../../components/dropdown";
+import Dropdown from "../../components/Dropdown";
 import DateRangeFilter from "../../components/DateRangeFilter";
 import { format, set } from "date-fns";
 import { MdEdit, MdDeleteOutline } from "react-icons/md";
@@ -210,7 +210,7 @@ const Live = () => {
         <div className="space-y-4">
             {
                 userRole === "SuperAdmin" && (
-                    <div className="p-6 bg-gray-50 flex justify-end">
+                    <div className="flex w-full justify-end bg-gray-50 p-4 sm:p-6">
                         <AICommandBar
                             placeholder="Add company Faisal Movers with transportation"
                             onExecute={handlePreview}   // important
@@ -218,7 +218,7 @@ const Live = () => {
                             onError={(err) => console.error(err)}
                             resetTrigger={resetCommandBar}
                             disabled={showModal}
-
+                            maxWidthClass="w-full max-w-2xl"
                         />
                     </div>
 
@@ -242,12 +242,12 @@ const Live = () => {
 
 
             {/* 🔹 FILTERS */}
-            <div className="p-6 bg-gray-50 flex justify-between">
-                <div className="flex items-start justify-start">
+            <div className="flex flex-col gap-4 bg-gray-50 p-4 sm:flex-row sm:items-end sm:justify-between sm:p-6">
+                <div className="min-w-0 flex-1">
                     <input
                         type="text"
                         placeholder="search business"
-                        className="border p-2 rounded text-sm text-gray-700 focus:outline-none focus:ring-1 focus:border-blue-200 w-full"
+                        className="w-full rounded border p-2 text-sm text-gray-700 focus:border-blue-200 focus:outline-none focus:ring-1"
                         value={nameFilter}
                         onChange={(e) => {
                             setPageNumber(1);
@@ -256,7 +256,7 @@ const Live = () => {
                     />
 
                 </div>
-                <div className="flex gap-4 items-end justify-end">
+                <div className="flex flex-wrap items-end justify-start gap-3 sm:justify-end">
                     <Dropdown
                         options={statusOptions}
                         value={statusFilter}
@@ -265,7 +265,8 @@ const Live = () => {
                             SetStatusFilter(val);
                         }}
                         placeholder="All Status"
-                        className="h-9" />
+                        className="w-full min-w-0 sm:w-52"
+                    />
                     <DateRangeFilter
                         placeholder="filter by created date"
                         onChange={({ start, end }) => {

@@ -1,4 +1,3 @@
-import { set } from "date-fns";
 import { useRef, useState } from "react";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import { validateAICommand } from "../validations/aiCommandValidator.js";
@@ -10,9 +9,13 @@ const AICommandBar = ({
     onSuccess,
     onError,
     autoClear = true,
-    resetTrigger,//  NEW
-    disabled = false // NEW
-
+    resetTrigger,
+    disabled = false,
+    submitLabel = "Run",
+    showSubmitButton = false,
+    accept = ".csv,.xml,.pdf,.png,.jpg,.jpeg",
+    /** Tailwind max-width (and optional min-width) classes for the bar container */
+    maxWidthClass = "max-w-xl",
 }) => {
     const [text, setText] = useState("");
     const [file, setFile] = useState(null);
@@ -59,8 +62,8 @@ const AICommandBar = ({
                     if (fileRef.current) fileRef.current.value = "";
                 }
                 onSuccess?.(res);
-            } else (err) => {
-                setError(err.message || "Something went wrong");
+            } else {
+                setError(res?.message || "Something went wrong");
                 onError?.(res);
             }
 
@@ -110,14 +113,14 @@ const AICommandBar = ({
     };
 
     return (
-        <div className="w-full max-w-xl flex flex-col gap-2">
+        <div className={`relative z-10 w-full flex flex-col gap-2 ${maxWidthClass}`.trim()}>
 
             {/* hidden file input */}
             <input
                 type="file"
                 ref={fileRef}
                 className="hidden"
-                accept=".csv,.xml,.pdf,.png,.jpg,.jpeg"
+                accept={accept}
                 onChange={handleFileChange}
             />
 
@@ -166,10 +169,21 @@ const AICommandBar = ({
 
                 {/* loader */}
                 {loading && (
-                    <div className="mr-2">
+                    <div className="mr-2 shrink-0">
                         <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
                     </div>
                 )}
+
+                {showSubmitButton ? (
+                    <button
+                        type="button"
+                        onClick={() => sendCommand()}
+                        disabled={isDisabled}
+                        className="shrink-0 rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                        {submitLabel}
+                    </button>
+                ) : null}
             </div>
 
             {/* 🔥 ERROR MESSAGE */}

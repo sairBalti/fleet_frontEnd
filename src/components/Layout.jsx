@@ -4,20 +4,16 @@ import Sidebar from "./SideBar";
 
 const Layout = () => {
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen min-h-0 overflow-hidden">
       {/* Sidebar */}
-      <div className="h-full">
+      <div className="h-full shrink-0">
         <Sidebar />
-        
       </div>
-      
 
-      <div className="flex flex-col flex-1">
-        {/* Header */}
+      <div className="flex min-w-0 flex-1 flex-col">
         <Header />
 
-        {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-4 bg-gray-100">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-gray-100 p-3 sm:p-4">
           <Outlet />
         </main>
       </div>

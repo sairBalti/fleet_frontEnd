@@ -41,3 +41,42 @@ export const getBranchList = async (params) => {
     const res = await API.post("/companies/branchList", params);
     return res.data;
 };
+
+export const createBranchAI = async ({ message, data }) => {
+    const hasFile = !!data?.file;
+
+    let payload;
+    let config = {};
+
+    if (hasFile) {
+        payload = new FormData();
+        payload.append("message", message || "");
+        if (data?.company_id) payload.append("company_id", data.company_id);
+        payload.append("file", data.file);
+        config = {
+            headers: { "Content-Type": "multipart/form-data" }
+        };
+    } else {
+        payload = data
+            ? {
+                action: data.action,
+                company_id: data.company_id,
+                branch_name: data.branch_name,
+                branch_location: data.branch_location
+            }
+            : { message };
+    }
+
+    const res = await API.post("/companies/branch/ingest", payload, config);
+    return res.data;
+};
+
+export const previewBranchAI = async ({ message }) => {
+    const res = await API.post("/companies/branch/preview", { message });
+    return res.data;
+};
+
+export const getDemoRequests = async (params) => {
+    const res = await API.post("/demo-requests/targets", params);
+    return res.data;
+};
